@@ -1,0 +1,91 @@
+import requests
+import json
+import discord
+import tweepy
+
+twitter_keys = {
+        'consumer_key':        'GIy0W9gAlT0JZnkckaNM80irg',
+        'consumer_secret':     '370tLYWMy3kWzAxaAzsRe6QifLsJ4WzI3h8uzP0x3rLljwCAco',
+        'access_token_key':    '1257379940321935369-6hi0KkRd58HljWAFAyCAxDsx7sALdO',
+        'access_token_secret': 'hd2rhiwCkDb0cBMj7bdoKrcooZ0wTqNSvq3AxqoQOeZXR'
+    }
+
+auth = tweepy.OAuthHandler(twitter_keys['consumer_key'], twitter_keys['consumer_secret'])
+auth.set_access_token(twitter_keys['access_token_key'], twitter_keys['access_token_secret'])
+
+api = tweepy.API(auth, wait_on_rate_limit=True,
+    wait_on_rate_limit_notify=True)
+
+client = discord.Client()
+TOKEN = 'ODQzODIzNzE4MTczNzY5NzY5.YKJeEw.rpzt_2VAZ1v2byplWPLRFRgRl6U'
+
+
+
+def get_quote():
+  response = requests.get("https://zenquotes.io/api/random")
+  json_data = json.loads(response.text)
+  quote = json_data[0]['q'] + " -" + json_data[0]['a']
+  return(quote)
+
+
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+
+@client.event
+async def on_message(message):
+   if message.author == client.user:
+       return
+
+
+   if message.content.startswith('HELP') :
+       await message.channel.send('I am here to help !\nI will not let you say cuss words ! \nType $inspire for Inspiritional Quotes \nType the first name of a member to know more about them !')
+
+   if message.content.startswith('Khara') :
+        await message.channel.send('bro pls ma tseb')
+
+
+
+   if message.content.startswith('Ahmad') :
+        await message.channel.send('Mortada is going to Bristol University.He likes Coding and Karate') 
+   if message.content.startswith('Naim') :
+        await message.channel.send('El Rouwadi is going to Concordia University.He likes Tennis and Semen') 
+   if message.content.startswith('Ali') :
+        await message.channel.send('Soukarieh is going to Grenoble aw Sorbonne idfk.He likes technology and The Weeknd') 
+   if message.content.startswith('Abed') :
+        await message.channel.send('Al Moustapaha is going to Concordia University.He likes Mo Salah and Mr Abdo.') 
+   if message.content.startswith('Ayman') :
+        await message.channel.send('El Balaa is going to Concordia University.He likes investing and Travis Scott')
+   if message.content.startswith('Georges') :
+        await message.channel.send('Chebly is going to UMASS.He likes Casemiro and Networking courses.')  
+   if message.content.startswith('Omar') :
+        await message.channel.send('Please Specify OmarG or OmarK') 
+   if message.content.startswith('OmarG') :
+        await message.channel.send('is going to Bristol University.He likes politics and war technologies ?! :)') 
+   if message.content.startswith('OmarK') :
+        await message.channel.send('is going to Concordia University.He likes Formula 1 and Formula 1')
+   if message.content.startswith('John') :
+        await message.channel.send('Abboud is going to AUB.He likes Lebanon w ktir Lebanon cz rayih AUB.')  
+   if message.content.startswith('Chris') :
+        await message.channel.send('Sarkis is going to University ( soon to be announced).He likes a latta semen,Joyner Lucas and cracking bones.') 
+
+
+
+   if message.content.startswith("Tweet Quote") :
+      await message.channel.send("I just did that")
+      quote = get_quote()
+      api.update_status(quote)
+
+   if message.content.startswith("Tweet This") :
+      await message.channel.send("Tweet What ?")
+      msg = await client.wait_for('message')
+      response = (msg.content)
+      api.update_status(response)
+      
+
+
+
+
+
+client.run(TOKEN)
